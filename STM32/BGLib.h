@@ -1,49 +1,9 @@
-// Bluegiga BGLib Arduino interface library header file
-// 2014-02-12 by Jeff Rowberg <jeff@rowberg.net>
-// Updates should (hopefully) always be available at https://github.com/jrowberg/bglib
-
-// Changelog:
-//      2014-02-12 - Update to match SDK build 98
-//                 - Fix major issue with uint8array commands
-//      2014-01-13 - Update to match SDK build 94
-//      2013-03-14 - Add support for packet mode
-//                   Add support for BLE wake-up
-//                   Fix serial data read routine to work properly
-//      2012-11-14 - Initial release
-
-/* ============================================
-BGLib Arduino interface library code is placed under the MIT license
-Copyright (c) 2014 Jeff Rowberg
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-===============================================
-*/
-
 #ifndef __BGLIB_H__
 #define __BGLIB_H__
 
-#include <Arduino.h>
 #include "BGLibConfig.h"
-
-// uncomment this line for Serial.println() debug output
-//#define DEBUG
-
+#include "inttypes.h"
+#pragma region BGLIB_DEFINES
 #define BGLIB_SYSTEM_ENDPOINT_API                                   0
 #define BGLIB_SYSTEM_ENDPOINT_TEST                                  1
 #define BGLIB_SYSTEM_ENDPOINT_SCRIPT                                2
@@ -117,37 +77,36 @@ THE SOFTWARE.
 #define PACKED __attribute__((packed))
 #define ALIGNED __attribute__((aligned(0x4)))
 
-typedef uint8_t    uint8;
-typedef uint16_t   uint16;
-typedef int16_t    int16;
-typedef uint32_t   uint32;
-typedef int8_t     int8;
+
+#pragma endregion
+#pragma region BGLIG_STRUCTS
+				  
 
 typedef struct bd_addr_t {
-    uint8 addr[6];
+    uint8_t addr[6];
 } bd_addr;
 
 typedef bd_addr hwaddr;
 typedef struct {
-    uint8 len;
-    uint8 data[];
+    uint8_t len;
+    uint8_t data[];
 } uint8array;
 
 typedef struct {
-    uint8 len;
-    int8 data[];
+    uint8_t len;
+    int8_t data[];
 } string;
 
 struct ble_header {
-    uint8  type_hilen;
-    uint8  lolen;
-    uint8  cls;
-    uint8  command;
+    uint8_t  type_hilen;
+    uint8_t  lolen;
+    uint8_t  cls;
+    uint8_t  command;
 };
 
 #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_RESET
 struct ble_msg_system_reset_cmd_t {
-    uint8 boot_in_dfu;
+    uint8_t boot_in_dfu;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_ADDRESS_GET
@@ -157,114 +116,114 @@ struct ble_msg_system_address_get_rsp_t {
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_REG_WRITE
 struct ble_msg_system_reg_write_cmd_t {
-    uint16 address;
-    uint8 value;
+    uint16_t address;
+    uint8_t value;
 } PACKED;
 struct ble_msg_system_reg_write_rsp_t {
-    uint16 result;
+    uint16_t result;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_REG_READ
 struct ble_msg_system_reg_read_cmd_t {
-    uint16 address;
+    uint16_t address;
 } PACKED;
 struct ble_msg_system_reg_read_rsp_t {
-    uint16 address;
-    uint8 value;
+    uint16_t address;
+    uint8_t value;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_GET_COUNTERS
 struct ble_msg_system_get_counters_rsp_t {
-    uint8 txok;
-    uint8 txretry;
-    uint8 rxok;
-    uint8 rxfail;
-    uint8 mbuf;
+    uint8_t txok;
+    uint8_t txretry;
+    uint8_t rxok;
+    uint8_t rxfail;
+    uint8_t mbuf;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_GET_CONNECTIONS
 struct ble_msg_system_get_connections_rsp_t {
-    uint8 maxconn;
+    uint8_t maxconn;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_READ_MEMORY
 struct ble_msg_system_read_memory_cmd_t {
-    uint32 address;
-    uint8 length;
+    uint32_t address;
+    uint8_t length;
 } PACKED;
 struct ble_msg_system_read_memory_rsp_t {
-    uint32 address;
+    uint32_t address;
     uint8array data;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_GET_INFO
 struct ble_msg_system_get_info_rsp_t {
-    uint16 major;
-    uint16 minor;
-    uint16 patch;
-    uint16 build;
-    uint16 ll_version;
-    uint8 protocol_version;
-    uint8 hw;
+    uint16_t major;
+    uint16_t minor;
+    uint16_t patch;
+    uint16_t build;
+    uint16_t ll_version;
+    uint8_t protocol_version;
+    uint8_t hw;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_ENDPOINT_TX
 struct ble_msg_system_endpoint_tx_cmd_t {
-    uint8 endpoint;
-    uint8 data_len;
-    const uint8 *data_data;
+    uint8_t endpoint;
+    uint8_t data_len;
+    const uint8_t *data_data;
 } PACKED;
 struct ble_msg_system_endpoint_tx_rsp_t {
-    uint16 result;
+    uint16_t result;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_WHITELIST_APPEND
 struct ble_msg_system_whitelist_append_cmd_t {
     bd_addr address;
-    uint8 address_type;
+    uint8_t address_type;
 } PACKED;
 struct ble_msg_system_whitelist_append_rsp_t {
-    uint16 result;
+    uint16_t result;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_WHITELIST_REMOVE
 struct ble_msg_system_whitelist_remove_cmd_t {
     bd_addr address;
-    uint8 address_type;
+    uint8_t address_type;
 } PACKED;
 struct ble_msg_system_whitelist_remove_rsp_t {
-    uint16 result;
+    uint16_t result;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_ENDPOINT_RX
 struct ble_msg_system_endpoint_rx_cmd_t {
-    uint8 endpoint;
-    uint8 size;
+    uint8_t endpoint;
+    uint8_t size;
 } PACKED;
 struct ble_msg_system_endpoint_rx_rsp_t {
-    uint16 result;
+    uint16_t result;
     uint8array data;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_ENDPOINT_SET_WATERMARKS
 struct ble_msg_system_endpoint_set_watermarks_cmd_t {
-    uint8 endpoint;
-    uint8 rx;
-    uint8 tx;
+    uint8_t endpoint;
+    uint8_t rx;
+    uint8_t tx;
 } PACKED;
 struct ble_msg_system_endpoint_set_watermarks_rsp_t {
-    uint16 result;
+    uint16_t result;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_EVENT_SYSTEM_BOOT
 struct ble_msg_system_boot_evt_t {
-    uint16 major;
-    uint16 minor;
-    uint16 patch;
-    uint16 build;
-    uint16 ll_version;
-    uint8 protocol_version;
-    uint8 hw;
+    uint16_t major;
+    uint16_t minor;
+    uint16_t patch;
+    uint16_t build;
+    uint16_t ll_version;
+    uint8_t protocol_version;
+    uint8_t hw;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_EVENT_SYSTEM_DEBUG
@@ -274,73 +233,73 @@ struct ble_msg_system_debug_evt_t {
 #endif
 #ifdef BGLIB_ENABLE_EVENT_SYSTEM_ENDPOINT_WATERMARK_RX
 struct ble_msg_system_endpoint_watermark_rx_evt_t {
-    uint8 endpoint;
-    uint8 data;
+    uint8_t endpoint;
+    uint8_t data;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_EVENT_SYSTEM_ENDPOINT_WATERMARK_TX
 struct ble_msg_system_endpoint_watermark_tx_evt_t {
-    uint8 endpoint;
-    uint8 data;
+    uint8_t endpoint;
+    uint8_t data;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_EVENT_SYSTEM_SCRIPT_FAILURE
 struct ble_msg_system_script_failure_evt_t {
-    uint16 address;
-    uint16 reason;
+    uint16_t address;
+    uint16_t reason;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_EVENT_SYSTEM_PROTOCOL_ERROR
 struct ble_msg_system_protocol_error_evt_t {
-    uint16 reason;
+    uint16_t reason;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_FLASH_PS_SAVE
 struct ble_msg_flash_ps_save_cmd_t {
-    uint16 key;
-    uint8 value_len;
-    const uint8 *value_data;
+    uint16_t key;
+    uint8_t value_len;
+    const uint8_t *value_data;
 } PACKED;
 struct ble_msg_flash_ps_save_rsp_t {
-    uint16 result;
+    uint16_t result;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_FLASH_PS_LOAD
 struct ble_msg_flash_ps_load_cmd_t {
-    uint16 key;
+    uint16_t key;
 } PACKED;
 struct ble_msg_flash_ps_load_rsp_t {
-    uint16 result;
+    uint16_t result;
     uint8array value;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_FLASH_PS_ERASE
 struct ble_msg_flash_ps_erase_cmd_t {
-    uint16 key;
+    uint16_t key;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_FLASH_ERASE_PAGE
 struct ble_msg_flash_erase_page_cmd_t {
-    uint8 page;
+    uint8_t page;
 } PACKED;
 struct ble_msg_flash_erase_page_rsp_t {
-    uint16 result;
+    uint16_t result;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_FLASH_WRITE_DATA
 struct ble_msg_flash_write_data_cmd_t {
-    uint32 address;
-    uint8 data_len;
-    const uint8 *data_data;
+    uint32_t address;
+    uint8_t data_len;
+    const uint8_t *data_data;
 } PACKED;
 struct ble_msg_flash_write_data_rsp_t {
-    uint16 result;
+    uint16_t result;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_FLASH_READ_DATA
 struct ble_msg_flash_read_data_cmd_t {
-    uint32 address;
-    uint8 length;
+    uint32_t address;
+    uint8_t length;
 } PACKED;
 struct ble_msg_flash_read_data_rsp_t {
     uint8array data;
@@ -348,788 +307,788 @@ struct ble_msg_flash_read_data_rsp_t {
 #endif
 #ifdef BGLIB_ENABLE_EVENT_FLASH_PS_KEY
 struct ble_msg_flash_ps_key_evt_t {
-    uint16 key;
+    uint16_t key;
     uint8array value;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_ATTRIBUTES_WRITE
 struct ble_msg_attributes_write_cmd_t {
-    uint16 handle;
-    uint8 offset;
-    uint8 value_len;
-    const uint8 *value_data;
+    uint16_t handle;
+    uint8_t offset;
+    uint8_t value_len;
+    const uint8_t *value_data;
 } PACKED;
 struct ble_msg_attributes_write_rsp_t {
-    uint16 result;
+    uint16_t result;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_ATTRIBUTES_READ
 struct ble_msg_attributes_read_cmd_t {
-    uint16 handle;
-    uint16 offset;
+    uint16_t handle;
+    uint16_t offset;
 } PACKED;
 struct ble_msg_attributes_read_rsp_t {
-    uint16 handle;
-    uint16 offset;
-    uint16 result;
+    uint16_t handle;
+    uint16_t offset;
+    uint16_t result;
     uint8array value;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_ATTRIBUTES_READ_TYPE
 struct ble_msg_attributes_read_type_cmd_t {
-    uint16 handle;
+    uint16_t handle;
 } PACKED;
 struct ble_msg_attributes_read_type_rsp_t {
-    uint16 handle;
-    uint16 result;
+    uint16_t handle;
+    uint16_t result;
     uint8array value;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_ATTRIBUTES_USER_READ_RESPONSE
 struct ble_msg_attributes_user_read_response_cmd_t {
-    uint8 connection;
-    uint8 att_error;
-    uint8 value_len;
-    const uint8 *value_data;
+    uint8_t connection;
+    uint8_t att_error;
+    uint8_t value_len;
+    const uint8_t *value_data;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_ATTRIBUTES_USER_WRITE_RESPONSE
 struct ble_msg_attributes_user_write_response_cmd_t {
-    uint8 connection;
-    uint8 att_error;
+    uint8_t connection;
+    uint8_t att_error;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_EVENT_ATTRIBUTES_VALUE
 struct ble_msg_attributes_value_evt_t {
-    uint8 connection;
-    uint8 reason;
-    uint16 handle;
-    uint16 offset;
+    uint8_t connection;
+    uint8_t reason;
+    uint16_t handle;
+    uint16_t offset;
     uint8array value;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_EVENT_ATTRIBUTES_USER_READ_REQUEST
 struct ble_msg_attributes_user_read_request_evt_t {
-    uint8 connection;
-    uint16 handle;
-    uint16 offset;
-    uint8 maxsize;
+    uint8_t connection;
+    uint16_t handle;
+    uint16_t offset;
+    uint8_t maxsize;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_EVENT_ATTRIBUTES_STATUS
 struct ble_msg_attributes_status_evt_t {
-    uint16 handle;
-    uint8 flags;
+    uint16_t handle;
+    uint8_t flags;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_CONNECTION_DISCONNECT
 struct ble_msg_connection_disconnect_cmd_t {
-    uint8 connection;
+    uint8_t connection;
 } PACKED;
 struct ble_msg_connection_disconnect_rsp_t {
-    uint8 connection;
-    uint16 result;
+    uint8_t connection;
+    uint16_t result;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_CONNECTION_GET_RSSI
 struct ble_msg_connection_get_rssi_cmd_t {
-    uint8 connection;
+    uint8_t connection;
 } PACKED;
 struct ble_msg_connection_get_rssi_rsp_t {
-    uint8 connection;
-    int8 rssi;
+    uint8_t connection;
+    int8_t rssi;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_CONNECTION_UPDATE
 struct ble_msg_connection_update_cmd_t {
-    uint8 connection;
-    uint16 interval_min;
-    uint16 interval_max;
-    uint16 latency;
-    uint16 timeout;
+    uint8_t connection;
+    uint16_t interval_min;
+    uint16_t interval_max;
+    uint16_t latency;
+    uint16_t timeout;
 } PACKED;
 struct ble_msg_connection_update_rsp_t {
-    uint8 connection;
-    uint16 result;
+    uint8_t connection;
+    uint16_t result;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_CONNECTION_VERSION_UPDATE
 struct ble_msg_connection_version_update_cmd_t {
-    uint8 connection;
+    uint8_t connection;
 } PACKED;
 struct ble_msg_connection_version_update_rsp_t {
-    uint8 connection;
-    uint16 result;
+    uint8_t connection;
+    uint16_t result;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_CONNECTION_CHANNEL_MAP_GET
 struct ble_msg_connection_channel_map_get_cmd_t {
-    uint8 connection;
+    uint8_t connection;
 } PACKED;
 struct ble_msg_connection_channel_map_get_rsp_t {
-    uint8 connection;
+    uint8_t connection;
     uint8array map;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_CONNECTION_CHANNEL_MAP_SET
 struct ble_msg_connection_channel_map_set_cmd_t {
-    uint8 connection;
-    uint8 map_len;
-    const uint8 *map_data;
+    uint8_t connection;
+    uint8_t map_len;
+    const uint8_t *map_data;
 } PACKED;
 struct ble_msg_connection_channel_map_set_rsp_t {
-    uint8 connection;
-    uint16 result;
+    uint8_t connection;
+    uint16_t result;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_CONNECTION_FEATURES_GET
 struct ble_msg_connection_features_get_cmd_t {
-    uint8 connection;
+    uint8_t connection;
 } PACKED;
 struct ble_msg_connection_features_get_rsp_t {
-    uint8 connection;
-    uint16 result;
+    uint8_t connection;
+    uint16_t result;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_CONNECTION_GET_STATUS
 struct ble_msg_connection_get_status_cmd_t {
-    uint8 connection;
+    uint8_t connection;
 } PACKED;
 struct ble_msg_connection_get_status_rsp_t {
-    uint8 connection;
+    uint8_t connection;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_CONNECTION_RAW_TX
 struct ble_msg_connection_raw_tx_cmd_t {
-    uint8 connection;
-    uint8 data_len;
-    const uint8 *data_data;
+    uint8_t connection;
+    uint8_t data_len;
+    const uint8_t *data_data;
 } PACKED;
 struct ble_msg_connection_raw_tx_rsp_t {
-    uint8 connection;
+    uint8_t connection;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_EVENT_CONNECTION_STATUS
 struct ble_msg_connection_status_evt_t {
-    uint8 connection;
-    uint8 flags;
+    uint8_t connection;
+    uint8_t flags;
     bd_addr address;
-    uint8 address_type;
-    uint16 conn_interval;
-    uint16 timeout;
-    uint16 latency;
-    uint8 bonding;
+    uint8_t address_type;
+    uint16_t conn_interval;
+    uint16_t timeout;
+    uint16_t latency;
+    uint8_t bonding;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_EVENT_CONNECTION_VERSION_IND
 struct ble_msg_connection_version_ind_evt_t {
-    uint8 connection;
-    uint8 vers_nr;
-    uint16 comp_id;
-    uint16 sub_vers_nr;
+    uint8_t connection;
+    uint8_t vers_nr;
+    uint16_t comp_id;
+    uint16_t sub_vers_nr;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_EVENT_CONNECTION_FEATURE_IND
 struct ble_msg_connection_feature_ind_evt_t {
-    uint8 connection;
+    uint8_t connection;
     uint8array features;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_EVENT_CONNECTION_RAW_RX
 struct ble_msg_connection_raw_rx_evt_t {
-    uint8 connection;
+    uint8_t connection;
     uint8array data;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_EVENT_CONNECTION_DISCONNECTED
 struct ble_msg_connection_disconnected_evt_t {
-    uint8 connection;
-    uint16 reason;
+    uint8_t connection;
+    uint16_t reason;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_ATTCLIENT_FIND_BY_TYPE_VALUE
 struct ble_msg_attclient_find_by_type_value_cmd_t {
-    uint8 connection;
-    uint16 start;
-    uint16 end;
-    uint16 uuid;
-    uint8 value_len;
-    const uint8 *value_data;
+    uint8_t connection;
+    uint16_t start;
+    uint16_t end;
+    uint16_t uuid;
+    uint8_t value_len;
+    const uint8_t *value_data;
 } PACKED;
 struct ble_msg_attclient_find_by_type_value_rsp_t {
-    uint8 connection;
-    uint16 result;
+    uint8_t connection;
+    uint16_t result;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_ATTCLIENT_READ_BY_GROUP_TYPE
 struct ble_msg_attclient_read_by_group_type_cmd_t {
-    uint8 connection;
-    uint16 start;
-    uint16 end;
-    uint8 uuid_len;
-    const uint8 *uuid_data;
+    uint8_t connection;
+    uint16_t start;
+    uint16_t end;
+    uint8_t uuid_len;
+    const uint8_t *uuid_data;
 } PACKED;
 struct ble_msg_attclient_read_by_group_type_rsp_t {
-    uint8 connection;
-    uint16 result;
+    uint8_t connection;
+    uint16_t result;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_ATTCLIENT_READ_BY_TYPE
 struct ble_msg_attclient_read_by_type_cmd_t {
-    uint8 connection;
-    uint16 start;
-    uint16 end;
-    uint8 uuid_len;
-    const uint8 *uuid_data;
+    uint8_t connection;
+    uint16_t start;
+    uint16_t end;
+    uint8_t uuid_len;
+    const uint8_t *uuid_data;
 } PACKED;
 struct ble_msg_attclient_read_by_type_rsp_t {
-    uint8 connection;
-    uint16 result;
+    uint8_t connection;
+    uint16_t result;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_ATTCLIENT_FIND_INFORMATION
 struct ble_msg_attclient_find_information_cmd_t {
-    uint8 connection;
-    uint16 start;
-    uint16 end;
+    uint8_t connection;
+    uint16_t start;
+    uint16_t end;
 } PACKED;
 struct ble_msg_attclient_find_information_rsp_t {
-    uint8 connection;
-    uint16 result;
+    uint8_t connection;
+    uint16_t result;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_ATTCLIENT_READ_BY_HANDLE
 struct ble_msg_attclient_read_by_handle_cmd_t {
-    uint8 connection;
-    uint16 chrhandle;
+    uint8_t connection;
+    uint16_t chrhandle;
 } PACKED;
 struct ble_msg_attclient_read_by_handle_rsp_t {
-    uint8 connection;
-    uint16 result;
+    uint8_t connection;
+    uint16_t result;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_ATTCLIENT_ATTRIBUTE_WRITE
 struct ble_msg_attclient_attribute_write_cmd_t {
-    uint8 connection;
-    uint16 atthandle;
-    uint8 data_len;
-    const uint8 *data_data;
+    uint8_t connection;
+    uint16_t atthandle;
+    uint8_t data_len;
+    const uint8_t *data_data;
 } PACKED;
 struct ble_msg_attclient_attribute_write_rsp_t {
-    uint8 connection;
-    uint16 result;
+    uint8_t connection;
+    uint16_t result;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_ATTCLIENT_WRITE_COMMAND
 struct ble_msg_attclient_write_command_cmd_t {
-    uint8 connection;
-    uint16 atthandle;
-    uint8 data_len;
-    const uint8 *data_data;
+    uint8_t connection;
+    uint16_t atthandle;
+    uint8_t data_len;
+    const uint8_t *data_data;
 } PACKED;
 struct ble_msg_attclient_write_command_rsp_t {
-    uint8 connection;
-    uint16 result;
+    uint8_t connection;
+    uint16_t result;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_ATTCLIENT_INDICATE_CONFIRM
 struct ble_msg_attclient_indicate_confirm_cmd_t {
-    uint8 connection;
+    uint8_t connection;
 } PACKED;
 struct ble_msg_attclient_indicate_confirm_rsp_t {
-    uint16 result;
+    uint16_t result;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_ATTCLIENT_READ_LONG
 struct ble_msg_attclient_read_long_cmd_t {
-    uint8 connection;
-    uint16 chrhandle;
+    uint8_t connection;
+    uint16_t chrhandle;
 } PACKED;
 struct ble_msg_attclient_read_long_rsp_t {
-    uint8 connection;
-    uint16 result;
+    uint8_t connection;
+    uint16_t result;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_ATTCLIENT_PREPARE_WRITE
 struct ble_msg_attclient_prepare_write_cmd_t {
-    uint8 connection;
-    uint16 atthandle;
-    uint16 offset;
-    uint8 data_len;
-    const uint8 *data_data;
+    uint8_t connection;
+    uint16_t atthandle;
+    uint16_t offset;
+    uint8_t data_len;
+    const uint8_t *data_data;
 } PACKED;
 struct ble_msg_attclient_prepare_write_rsp_t {
-    uint8 connection;
-    uint16 result;
+    uint8_t connection;
+    uint16_t result;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_ATTCLIENT_EXECUTE_WRITE
 struct ble_msg_attclient_execute_write_cmd_t {
-    uint8 connection;
-    uint8 commit;
+    uint8_t connection;
+    uint8_t commit;
 } PACKED;
 struct ble_msg_attclient_execute_write_rsp_t {
-    uint8 connection;
-    uint16 result;
+    uint8_t connection;
+    uint16_t result;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_ATTCLIENT_READ_MULTIPLE
 struct ble_msg_attclient_read_multiple_cmd_t {
-    uint8 connection;
-    uint8 handles_len;
-    const uint8 *handles_data;
+    uint8_t connection;
+    uint8_t handles_len;
+    const uint8_t *handles_data;
 } PACKED;
 struct ble_msg_attclient_read_multiple_rsp_t {
-    uint8 connection;
-    uint16 result;
+    uint8_t connection;
+    uint16_t result;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_EVENT_ATTCLIENT_INDICATED
 struct ble_msg_attclient_indicated_evt_t {
-    uint8 connection;
-    uint16 attrhandle;
+    uint8_t connection;
+    uint16_t attrhandle;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_EVENT_ATTCLIENT_PROCEDURE_COMPLETED
 struct ble_msg_attclient_procedure_completed_evt_t {
-    uint8 connection;
-    uint16 result;
-    uint16 chrhandle;
+    uint8_t connection;
+    uint16_t result;
+    uint16_t chrhandle;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_EVENT_ATTCLIENT_GROUP_FOUND
 struct ble_msg_attclient_group_found_evt_t {
-    uint8 connection;
-    uint16 start;
-    uint16 end;
+    uint8_t connection;
+    uint16_t start;
+    uint16_t end;
     uint8array uuid;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_EVENT_ATTCLIENT_ATTRIBUTE_FOUND
 struct ble_msg_attclient_attribute_found_evt_t {
-    uint8 connection;
-    uint16 chrdecl;
-    uint16 value;
-    uint8 properties;
+    uint8_t connection;
+    uint16_t chrdecl;
+    uint16_t value;
+    uint8_t properties;
     uint8array uuid;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_EVENT_ATTCLIENT_FIND_INFORMATION_FOUND
 struct ble_msg_attclient_find_information_found_evt_t {
-    uint8 connection;
-    uint16 chrhandle;
+    uint8_t connection;
+    uint16_t chrhandle;
     uint8array uuid;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_EVENT_ATTCLIENT_ATTRIBUTE_VALUE
 struct ble_msg_attclient_attribute_value_evt_t {
-    uint8 connection;
-    uint16 atthandle;
-    uint8 type;
+    uint8_t connection;
+    uint16_t atthandle;
+    uint8_t type;
     uint8array value;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_EVENT_ATTCLIENT_READ_MULTIPLE_RESPONSE
 struct ble_msg_attclient_read_multiple_response_evt_t {
-    uint8 connection;
+    uint8_t connection;
     uint8array handles;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_SM_ENCRYPT_START
 struct ble_msg_sm_encrypt_start_cmd_t {
-    uint8 handle;
-    uint8 bonding;
+    uint8_t handle;
+    uint8_t bonding;
 } PACKED;
 struct ble_msg_sm_encrypt_start_rsp_t {
-    uint8 handle;
-    uint16 result;
+    uint8_t handle;
+    uint16_t result;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_SM_SET_BONDABLE_MODE
 struct ble_msg_sm_set_bondable_mode_cmd_t {
-    uint8 bondable;
+    uint8_t bondable;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_SM_DELETE_BONDING
 struct ble_msg_sm_delete_bonding_cmd_t {
-    uint8 handle;
+    uint8_t handle;
 } PACKED;
 struct ble_msg_sm_delete_bonding_rsp_t {
-    uint16 result;
+    uint16_t result;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_SM_SET_PARAMETERS
 struct ble_msg_sm_set_parameters_cmd_t {
-    uint8 mitm;
-    uint8 min_key_size;
-    uint8 io_capabilities;
+    uint8_t mitm;
+    uint8_t min_key_size;
+    uint8_t io_capabilities;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_SM_PASSKEY_ENTRY
 struct ble_msg_sm_passkey_entry_cmd_t {
-    uint8 handle;
-    uint32 passkey;
+    uint8_t handle;
+    uint32_t passkey;
 } PACKED;
 struct ble_msg_sm_passkey_entry_rsp_t {
-    uint16 result;
+    uint16_t result;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_SM_GET_BONDS
 struct ble_msg_sm_get_bonds_rsp_t {
-    uint8 bonds;
+    uint8_t bonds;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_SM_SET_OOB_DATA
 struct ble_msg_sm_set_oob_data_cmd_t {
-    uint8 oob_len;
-    const uint8 *oob_data;
+    uint8_t oob_len;
+    const uint8_t *oob_data;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_EVENT_SM_SMP_DATA
 struct ble_msg_sm_smp_data_evt_t {
-    uint8 handle;
-    uint8 packet;
+    uint8_t handle;
+    uint8_t packet;
     uint8array data;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_EVENT_SM_BONDING_FAIL
 struct ble_msg_sm_bonding_fail_evt_t {
-    uint8 handle;
-    uint16 result;
+    uint8_t handle;
+    uint16_t result;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_EVENT_SM_PASSKEY_DISPLAY
 struct ble_msg_sm_passkey_display_evt_t {
-    uint8 handle;
-    uint32 passkey;
+    uint8_t handle;
+    uint32_t passkey;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_EVENT_SM_PASSKEY_REQUEST
 struct ble_msg_sm_passkey_request_evt_t {
-    uint8 handle;
+    uint8_t handle;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_EVENT_SM_BOND_STATUS
 struct ble_msg_sm_bond_status_evt_t {
-    uint8 bond;
-    uint8 keysize;
-    uint8 mitm;
-    uint8 keys;
+    uint8_t bond;
+    uint8_t keysize;
+    uint8_t mitm;
+    uint8_t keys;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_GAP_SET_PRIVACY_FLAGS
 struct ble_msg_gap_set_privacy_flags_cmd_t {
-    uint8 peripheral_privacy;
-    uint8 central_privacy;
+    uint8_t peripheral_privacy;
+    uint8_t central_privacy;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_GAP_SET_MODE
 struct ble_msg_gap_set_mode_cmd_t {
-    uint8 discover;
-    uint8 connect;
+    uint8_t discover;
+    uint8_t connect;
 } PACKED;
 struct ble_msg_gap_set_mode_rsp_t {
-    uint16 result;
+    uint16_t result;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_GAP_DISCOVER
 struct ble_msg_gap_discover_cmd_t {
-    uint8 mode;
+    uint8_t mode;
 } PACKED;
 struct ble_msg_gap_discover_rsp_t {
-    uint16 result;
+    uint16_t result;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_GAP_CONNECT_DIRECT
 struct ble_msg_gap_connect_direct_cmd_t {
     bd_addr address;
-    uint8 addr_type;
-    uint16 conn_interval_min;
-    uint16 conn_interval_max;
-    uint16 timeout;
-    uint16 latency;
+    uint8_t addr_type;
+    uint16_t conn_interval_min;
+    uint16_t conn_interval_max;
+    uint16_t timeout;
+    uint16_t latency;
 } PACKED;
 struct ble_msg_gap_connect_direct_rsp_t {
-    uint16 result;
-    uint8 connection_handle;
+    uint16_t result;
+    uint8_t connection_handle;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_GAP_END_PROCEDURE
 struct ble_msg_gap_end_procedure_rsp_t {
-    uint16 result;
+    uint16_t result;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_GAP_CONNECT_SELECTIVE
 struct ble_msg_gap_connect_selective_cmd_t {
-    uint16 conn_interval_min;
-    uint16 conn_interval_max;
-    uint16 timeout;
-    uint16 latency;
+    uint16_t conn_interval_min;
+    uint16_t conn_interval_max;
+    uint16_t timeout;
+    uint16_t latency;
 } PACKED;
 struct ble_msg_gap_connect_selective_rsp_t {
-    uint16 result;
-    uint8 connection_handle;
+    uint16_t result;
+    uint8_t connection_handle;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_GAP_SET_FILTERING
 struct ble_msg_gap_set_filtering_cmd_t {
-    uint8 scan_policy;
-    uint8 adv_policy;
-    uint8 scan_duplicate_filtering;
+    uint8_t scan_policy;
+    uint8_t adv_policy;
+    uint8_t scan_duplicate_filtering;
 } PACKED;
 struct ble_msg_gap_set_filtering_rsp_t {
-    uint16 result;
+    uint16_t result;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_GAP_SET_SCAN_PARAMETERS
 struct ble_msg_gap_set_scan_parameters_cmd_t {
-    uint16 scan_interval;
-    uint16 scan_window;
-    uint8 active;
+    uint16_t scan_interval;
+    uint16_t scan_window;
+    uint8_t active;
 } PACKED;
 struct ble_msg_gap_set_scan_parameters_rsp_t {
-    uint16 result;
+    uint16_t result;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_GAP_SET_ADV_PARAMETERS
 struct ble_msg_gap_set_adv_parameters_cmd_t {
-    uint16 adv_interval_min;
-    uint16 adv_interval_max;
-    uint8 adv_channels;
+    uint16_t adv_interval_min;
+    uint16_t adv_interval_max;
+    uint8_t adv_channels;
 } PACKED;
 struct ble_msg_gap_set_adv_parameters_rsp_t {
-    uint16 result;
+    uint16_t result;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_GAP_SET_ADV_DATA
 struct ble_msg_gap_set_adv_data_cmd_t {
-    uint8 set_scanrsp;
-    uint8 adv_data_len;
-    const uint8 *adv_data_data;
+    uint8_t set_scanrsp;
+    uint8_t adv_data_len;
+    const uint8_t *adv_data_data;
 } PACKED;
 struct ble_msg_gap_set_adv_data_rsp_t {
-    uint16 result;
+    uint16_t result;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_GAP_SET_DIRECTED_CONNECTABLE_MODE
 struct ble_msg_gap_set_directed_connectable_mode_cmd_t {
     bd_addr address;
-    uint8 addr_type;
+    uint8_t addr_type;
 } PACKED;
 struct ble_msg_gap_set_directed_connectable_mode_rsp_t {
-    uint16 result;
+    uint16_t result;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_EVENT_GAP_SCAN_RESPONSE
 struct ble_msg_gap_scan_response_evt_t {
-    int8 rssi;
-    uint8 packet_type;
+    int8_t rssi;
+    uint8_t packet_type;
     bd_addr sender;
-    uint8 address_type;
-    uint8 bond;
+    uint8_t address_type;
+    uint8_t bond;
     uint8array data;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_EVENT_GAP_MODE_CHANGED
 struct ble_msg_gap_mode_changed_evt_t {
-    uint8 discover;
-    uint8 connect;
+    uint8_t discover;
+    uint8_t connect;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_HARDWARE_IO_PORT_CONFIG_IRQ
 struct ble_msg_hardware_io_port_config_irq_cmd_t {
-    uint8 port;
-    uint8 enable_bits;
-    uint8 falling_edge;
+    uint8_t port;
+    uint8_t enable_bits;
+    uint8_t falling_edge;
 } PACKED;
 struct ble_msg_hardware_io_port_config_irq_rsp_t {
-    uint16 result;
+    uint16_t result;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_HARDWARE_SET_SOFT_TIMER
 struct ble_msg_hardware_set_soft_timer_cmd_t {
-    uint32 time;
-    uint8 handle;
-    uint8 single_shot;
+    uint32_t time;
+    uint8_t handle;
+    uint8_t single_shot;
 } PACKED;
 struct ble_msg_hardware_set_soft_timer_rsp_t {
-    uint16 result;
+    uint16_t result;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_HARDWARE_ADC_READ
 struct ble_msg_hardware_adc_read_cmd_t {
-    uint8 input;
-    uint8 decimation;
-    uint8 reference_selection;
+    uint8_t input;
+    uint8_t decimation;
+    uint8_t reference_selection;
 } PACKED;
 struct ble_msg_hardware_adc_read_rsp_t {
-    uint16 result;
+    uint16_t result;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_HARDWARE_IO_PORT_CONFIG_DIRECTION
 struct ble_msg_hardware_io_port_config_direction_cmd_t {
-    uint8 port;
-    uint8 direction;
+    uint8_t port;
+    uint8_t direction;
 } PACKED;
 struct ble_msg_hardware_io_port_config_direction_rsp_t {
-    uint16 result;
+    uint16_t result;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_HARDWARE_IO_PORT_CONFIG_FUNCTION
 struct ble_msg_hardware_io_port_config_function_cmd_t {
-    uint8 port;
-    uint8 function;
+    uint8_t port;
+    uint8_t function;
 } PACKED;
 struct ble_msg_hardware_io_port_config_function_rsp_t {
-    uint16 result;
+    uint16_t result;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_HARDWARE_IO_PORT_CONFIG_PULL
 struct ble_msg_hardware_io_port_config_pull_cmd_t {
-    uint8 port;
-    uint8 tristate_mask;
-    uint8 pull_up;
+    uint8_t port;
+    uint8_t tristate_mask;
+    uint8_t pull_up;
 } PACKED;
 struct ble_msg_hardware_io_port_config_pull_rsp_t {
-    uint16 result;
+    uint16_t result;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_HARDWARE_IO_PORT_WRITE
 struct ble_msg_hardware_io_port_write_cmd_t {
-    uint8 port;
-    uint8 mask;
-    uint8 data;
+    uint8_t port;
+    uint8_t mask;
+    uint8_t data;
 } PACKED;
 struct ble_msg_hardware_io_port_write_rsp_t {
-    uint16 result;
+    uint16_t result;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_HARDWARE_IO_PORT_READ
 struct ble_msg_hardware_io_port_read_cmd_t {
-    uint8 port;
-    uint8 mask;
+    uint8_t port;
+    uint8_t mask;
 } PACKED;
 struct ble_msg_hardware_io_port_read_rsp_t {
-    uint16 result;
-    uint8 port;
-    uint8 data;
+    uint16_t result;
+    uint8_t port;
+    uint8_t data;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_HARDWARE_SPI_CONFIG
 struct ble_msg_hardware_spi_config_cmd_t {
-    uint8 channel;
-    uint8 polarity;
-    uint8 phase;
-    uint8 bit_order;
-    uint8 baud_e;
-    uint8 baud_m;
+    uint8_t channel;
+    uint8_t polarity;
+    uint8_t phase;
+    uint8_t bit_order;
+    uint8_t baud_e;
+    uint8_t baud_m;
 } PACKED;
 struct ble_msg_hardware_spi_config_rsp_t {
-    uint16 result;
+    uint16_t result;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_HARDWARE_SPI_TRANSFER
 struct ble_msg_hardware_spi_transfer_cmd_t {
-    uint8 channel;
-    uint8 data_len;
-    const uint8 *data_data;
+    uint8_t channel;
+    uint8_t data_len;
+    const uint8_t *data_data;
 } PACKED;
 struct ble_msg_hardware_spi_transfer_rsp_t {
-    uint16 result;
-    uint8 channel;
+    uint16_t result;
+    uint8_t channel;
     uint8array data;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_HARDWARE_I2C_READ
 struct ble_msg_hardware_i2c_read_cmd_t {
-    uint8 address;
-    uint8 stop;
-    uint8 length;
+    uint8_t address;
+    uint8_t stop;
+    uint8_t length;
 } PACKED;
 struct ble_msg_hardware_i2c_read_rsp_t {
-    uint16 result;
+    uint16_t result;
     uint8array data;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_HARDWARE_I2C_WRITE
 struct ble_msg_hardware_i2c_write_cmd_t {
-    uint8 address;
-    uint8 stop;
-    uint8 data_len;
-    const uint8 *data_data;
+    uint8_t address;
+    uint8_t stop;
+    uint8_t data_len;
+    const uint8_t *data_data;
 } PACKED;
 struct ble_msg_hardware_i2c_write_rsp_t {
-    uint8 written;
+    uint8_t written;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_HARDWARE_SET_TXPOWER
 struct ble_msg_hardware_set_txpower_cmd_t {
-    uint8 power;
+    uint8_t power;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_HARDWARE_TIMER_COMPARATOR
 struct ble_msg_hardware_timer_comparator_cmd_t {
-    uint8 timer;
-    uint8 channel;
-    uint8 mode;
-    uint16 comparator_value;
+    uint8_t timer;
+    uint8_t channel;
+    uint8_t mode;
+    uint16_t comparator_value;
 } PACKED;
 struct ble_msg_hardware_timer_comparator_rsp_t {
-    uint16 result;
+    uint16_t result;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_HARDWARE_IO_PORT_IRQ_ENABLE
 struct ble_msg_hardware_io_port_irq_enable_cmd_t {
-    uint8 port;
-    uint8 enable_bits;
+    uint8_t port;
+    uint8_t enable_bits;
 } PACKED;
 struct ble_msg_hardware_io_port_irq_enable_rsp_t {
-    uint16 result;
+    uint16_t result;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_HARDWARE_IO_PORT_IRQ_DIRECTION
 struct ble_msg_hardware_io_port_irq_direction_cmd_t {
-    uint8 port;
-    uint8 falling_edge;
+    uint8_t port;
+    uint8_t falling_edge;
 } PACKED;
 struct ble_msg_hardware_io_port_irq_direction_rsp_t {
-    uint16 result;
+    uint16_t result;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_EVENT_HARDWARE_IO_PORT_STATUS
 struct ble_msg_hardware_io_port_status_evt_t {
-    uint32 timestamp;
-    uint8 port;
-    uint8 irq;
-    uint8 state;
+    uint32_t timestamp;
+    uint8_t port;
+    uint8_t irq;
+    uint8_t state;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_EVENT_HARDWARE_SOFT_TIMER
 struct ble_msg_hardware_soft_timer_evt_t {
-    uint8 handle;
+    uint8_t handle;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_EVENT_HARDWARE_ADC_RESULT
 struct ble_msg_hardware_adc_result_evt_t {
-    uint8 input;
-    int16 value;
+    uint8_t input;
+    int16_t value;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_TEST_PHY_TX
 struct ble_msg_test_phy_tx_cmd_t {
-    uint8 channel;
-    uint8 length;
-    uint8 type;
+    uint8_t channel;
+    uint8_t length;
+    uint8_t type;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_TEST_PHY_RX
 struct ble_msg_test_phy_rx_cmd_t {
-    uint8 channel;
+    uint8_t channel;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_TEST_PHY_END
 struct ble_msg_test_phy_end_rsp_t {
-    uint16 counter;
+    uint16_t counter;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_TEST_GET_CHANNEL_MAP
@@ -1139,8 +1098,8 @@ struct ble_msg_test_get_channel_map_rsp_t {
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_TEST_DEBUG
 struct ble_msg_test_debug_cmd_t {
-    uint8 input_len;
-    const uint8 *input_data;
+    uint8_t input_len;
+    const uint8_t *input_data;
 } PACKED;
 struct ble_msg_test_debug_rsp_t {
     uint8array output;
@@ -1148,41 +1107,42 @@ struct ble_msg_test_debug_rsp_t {
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_TEST_CHANNEL_MODE
 struct ble_msg_test_channel_mode_cmd_t {
-    uint8 mode;
+    uint8_t mode;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_DFU_RESET
 struct ble_msg_dfu_reset_cmd_t {
-    uint8 dfu;
+    uint8_t dfu;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_DFU_FLASH_SET_ADDRESS
 struct ble_msg_dfu_flash_set_address_cmd_t {
-    uint32 address;
+    uint32_t address;
 } PACKED;
 struct ble_msg_dfu_flash_set_address_rsp_t {
-    uint16 result;
+    uint16_t result;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_DFU_FLASH_UPLOAD
 struct ble_msg_dfu_flash_upload_cmd_t {
-    uint8 data_len;
-    const uint8 *data_data;
+    uint8_t data_len;
+    const uint8_t *data_data;
 } PACKED;
 struct ble_msg_dfu_flash_upload_rsp_t {
-    uint16 result;
+    uint16_t result;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_COMMAND_DFU_FLASH_UPLOAD_FINISH
 struct ble_msg_dfu_flash_upload_finish_rsp_t {
-    uint16 result;
+    uint16_t result;
 } PACKED;
 #endif
 #ifdef BGLIB_ENABLE_EVENT_DFU_BOOT
 struct ble_msg_dfu_boot_evt_t {
-    uint32 version;
+    uint32_t version;
 } PACKED;
 #endif
+#pragma endregion
 
 class BGLib {
     public:
@@ -1211,7 +1171,7 @@ class BGLib {
         void (*onTXCommandComplete)();  // special function to run immediately after command transmission is complete
 
         #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_RESET
-            uint8_t ble_cmd_system_reset(uint8 boot_in_dfu);
+            uint8_t ble_cmd_system_reset(uint8_t boot_in_dfu);
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_HELLO
             uint8_t ble_cmd_system_hello();
@@ -1220,10 +1180,10 @@ class BGLib {
             uint8_t ble_cmd_system_address_get();
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_REG_WRITE
-            uint8_t ble_cmd_system_reg_write(uint16 address, uint8 value);
+            uint8_t ble_cmd_system_reg_write(uint16_t address, uint8_t value);
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_REG_READ
-            uint8_t ble_cmd_system_reg_read(uint16 address);
+            uint8_t ble_cmd_system_reg_read(uint16_t address);
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_GET_COUNTERS
             uint8_t ble_cmd_system_get_counters();
@@ -1232,28 +1192,28 @@ class BGLib {
             uint8_t ble_cmd_system_get_connections();
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_READ_MEMORY
-            uint8_t ble_cmd_system_read_memory(uint32 address, uint8 length);
+            uint8_t ble_cmd_system_read_memory(uint32_t address, uint8_t length);
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_GET_INFO
             uint8_t ble_cmd_system_get_info();
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_ENDPOINT_TX
-            uint8_t ble_cmd_system_endpoint_tx(uint8 endpoint, uint8 data_len, const uint8 *data_data);
+            uint8_t ble_cmd_system_endpoint_tx(uint8_t endpoint, uint8_t data_len, const uint8_t *data_data);
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_WHITELIST_APPEND
-            uint8_t ble_cmd_system_whitelist_append(bd_addr address, uint8 address_type);
+            uint8_t ble_cmd_system_whitelist_append(bd_addr address, uint8_t address_type);
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_WHITELIST_REMOVE
-            uint8_t ble_cmd_system_whitelist_remove(bd_addr address, uint8 address_type);
+            uint8_t ble_cmd_system_whitelist_remove(bd_addr address, uint8_t address_type);
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_WHITELIST_CLEAR
             uint8_t ble_cmd_system_whitelist_clear();
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_ENDPOINT_RX
-            uint8_t ble_cmd_system_endpoint_rx(uint8 endpoint, uint8 size);
+            uint8_t ble_cmd_system_endpoint_rx(uint8_t endpoint, uint8_t size);
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_ENDPOINT_SET_WATERMARKS
-            uint8_t ble_cmd_system_endpoint_set_watermarks(uint8 endpoint, uint8 rx, uint8 tx);
+            uint8_t ble_cmd_system_endpoint_set_watermarks(uint8_t endpoint, uint8_t rx, uint8_t tx);
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_FLASH_PS_DEFRAG
             uint8_t ble_cmd_flash_ps_defrag();
@@ -1265,208 +1225,208 @@ class BGLib {
             uint8_t ble_cmd_flash_ps_erase_all();
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_FLASH_PS_SAVE
-            uint8_t ble_cmd_flash_ps_save(uint16 key, uint8 value_len, const uint8 *value_data);
+            uint8_t ble_cmd_flash_ps_save(uint16_t key, uint8_t value_len, const uint8_t *value_data);
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_FLASH_PS_LOAD
-            uint8_t ble_cmd_flash_ps_load(uint16 key);
+            uint8_t ble_cmd_flash_ps_load(uint16_t key);
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_FLASH_PS_ERASE
-            uint8_t ble_cmd_flash_ps_erase(uint16 key);
+            uint8_t ble_cmd_flash_ps_erase(uint16_t key);
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_FLASH_ERASE_PAGE
-            uint8_t ble_cmd_flash_erase_page(uint8 page);
+            uint8_t ble_cmd_flash_erase_page(uint8_t page);
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_FLASH_WRITE_DATA
-            uint8_t ble_cmd_flash_write_data(uint32 address, uint8 data_len, const uint8 *data_data);
+            uint8_t ble_cmd_flash_write_data(uint32_t address, uint8_t data_len, const uint8_t *data_data);
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_FLASH_READ_DATA
-            uint8_t ble_cmd_flash_read_data(uint32 address, uint8 length);
+            uint8_t ble_cmd_flash_read_data(uint32_t address, uint8_t length);
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_ATTRIBUTES_WRITE
-            uint8_t ble_cmd_attributes_write(uint16 handle, uint8 offset, uint8 value_len, const uint8 *value_data);
+            uint8_t ble_cmd_attributes_write(uint16_t handle, uint8_t offset, uint8_t value_len, const uint8_t *value_data);
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_ATTRIBUTES_READ
-            uint8_t ble_cmd_attributes_read(uint16 handle, uint16 offset);
+            uint8_t ble_cmd_attributes_read(uint16_t handle, uint16_t offset);
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_ATTRIBUTES_READ_TYPE
-            uint8_t ble_cmd_attributes_read_type(uint16 handle);
+            uint8_t ble_cmd_attributes_read_type(uint16_t handle);
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_ATTRIBUTES_USER_READ_RESPONSE
-            uint8_t ble_cmd_attributes_user_read_response(uint8 connection, uint8 att_error, uint8 value_len, const uint8 *value_data);
+            uint8_t ble_cmd_attributes_user_read_response(uint8_t connection, uint8_t att_error, uint8_t value_len, const uint8_t *value_data);
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_ATTRIBUTES_USER_WRITE_RESPONSE
-            uint8_t ble_cmd_attributes_user_write_response(uint8 connection, uint8 att_error);
+            uint8_t ble_cmd_attributes_user_write_response(uint8_t connection, uint8_t att_error);
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_CONNECTION_DISCONNECT
-            uint8_t ble_cmd_connection_disconnect(uint8 connection);
+            uint8_t ble_cmd_connection_disconnect(uint8_t connection);
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_CONNECTION_GET_RSSI
-            uint8_t ble_cmd_connection_get_rssi(uint8 connection);
+            uint8_t ble_cmd_connection_get_rssi(uint8_t connection);
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_CONNECTION_UPDATE
-            uint8_t ble_cmd_connection_update(uint8 connection, uint16 interval_min, uint16 interval_max, uint16 latency, uint16 timeout);
+            uint8_t ble_cmd_connection_update(uint8_t connection, uint16_t interval_min, uint16_t interval_max, uint16_t latency, uint16_t timeout);
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_CONNECTION_VERSION_UPDATE
-            uint8_t ble_cmd_connection_version_update(uint8 connection);
+            uint8_t ble_cmd_connection_version_update(uint8_t connection);
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_CONNECTION_CHANNEL_MAP_GET
-            uint8_t ble_cmd_connection_channel_map_get(uint8 connection);
+            uint8_t ble_cmd_connection_channel_map_get(uint8_t connection);
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_CONNECTION_CHANNEL_MAP_SET
-            uint8_t ble_cmd_connection_channel_map_set(uint8 connection, uint8 map_len, const uint8 *map_data);
+            uint8_t ble_cmd_connection_channel_map_set(uint8_t connection, uint8_t map_len, const uint8_t *map_data);
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_CONNECTION_FEATURES_GET
-            uint8_t ble_cmd_connection_features_get(uint8 connection);
+            uint8_t ble_cmd_connection_features_get(uint8_t connection);
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_CONNECTION_GET_STATUS
-            uint8_t ble_cmd_connection_get_status(uint8 connection);
+            uint8_t ble_cmd_connection_get_status(uint8_t connection);
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_CONNECTION_RAW_TX
-            uint8_t ble_cmd_connection_raw_tx(uint8 connection, uint8 data_len, const uint8 *data_data);
+            uint8_t ble_cmd_connection_raw_tx(uint8_t connection, uint8_t data_len, const uint8_t *data_data);
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_ATTCLIENT_FIND_BY_TYPE_VALUE
-            uint8_t ble_cmd_attclient_find_by_type_value(uint8 connection, uint16 start, uint16 end, uint16 uuid, uint8 value_len, const uint8 *value_data);
+            uint8_t ble_cmd_attclient_find_by_type_value(uint8_t connection, uint16_t start, uint16_t end, uint16_t uuid, uint8_t value_len, const uint8_t *value_data);
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_ATTCLIENT_READ_BY_GROUP_TYPE
-            uint8_t ble_cmd_attclient_read_by_group_type(uint8 connection, uint16 start, uint16 end, uint8 uuid_len, const uint8 *uuid_data);
+            uint8_t ble_cmd_attclient_read_by_group_type(uint8_t connection, uint16_t start, uint16_t end, uint8_t uuid_len, const uint8_t *uuid_data);
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_ATTCLIENT_READ_BY_TYPE
-            uint8_t ble_cmd_attclient_read_by_type(uint8 connection, uint16 start, uint16 end, uint8 uuid_len, const uint8 *uuid_data);
+            uint8_t ble_cmd_attclient_read_by_type(uint8_t connection, uint16_t start, uint16_t end, uint8_t uuid_len, const uint8_t *uuid_data);
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_ATTCLIENT_FIND_INFORMATION
-            uint8_t ble_cmd_attclient_find_information(uint8 connection, uint16 start, uint16 end);
+            uint8_t ble_cmd_attclient_find_information(uint8_t connection, uint16_t start, uint16_t end);
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_ATTCLIENT_READ_BY_HANDLE
-            uint8_t ble_cmd_attclient_read_by_handle(uint8 connection, uint16 chrhandle);
+            uint8_t ble_cmd_attclient_read_by_handle(uint8_t connection, uint16_t chrhandle);
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_ATTCLIENT_ATTRIBUTE_WRITE
-            uint8_t ble_cmd_attclient_attribute_write(uint8 connection, uint16 atthandle, uint8 data_len, const uint8 *data_data);
+            uint8_t ble_cmd_attclient_attribute_write(uint8_t connection, uint16_t atthandle, uint8_t data_len, const uint8_t *data_data);
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_ATTCLIENT_WRITE_COMMAND
-            uint8_t ble_cmd_attclient_write_command(uint8 connection, uint16 atthandle, uint8 data_len, const uint8 *data_data);
+            uint8_t ble_cmd_attclient_write_command(uint8_t connection, uint16_t atthandle, uint8_t data_len, const uint8_t *data_data);
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_ATTCLIENT_INDICATE_CONFIRM
-            uint8_t ble_cmd_attclient_indicate_confirm(uint8 connection);
+            uint8_t ble_cmd_attclient_indicate_confirm(uint8_t connection);
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_ATTCLIENT_READ_LONG
-            uint8_t ble_cmd_attclient_read_long(uint8 connection, uint16 chrhandle);
+            uint8_t ble_cmd_attclient_read_long(uint8_t connection, uint16_t chrhandle);
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_ATTCLIENT_PREPARE_WRITE
-            uint8_t ble_cmd_attclient_prepare_write(uint8 connection, uint16 atthandle, uint16 offset, uint8 data_len, const uint8 *data_data);
+            uint8_t ble_cmd_attclient_prepare_write(uint8_t connection, uint16_t atthandle, uint16_t offset, uint8_t data_len, const uint8_t *data_data);
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_ATTCLIENT_EXECUTE_WRITE
-            uint8_t ble_cmd_attclient_execute_write(uint8 connection, uint8 commit);
+            uint8_t ble_cmd_attclient_execute_write(uint8_t connection, uint8_t commit);
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_ATTCLIENT_READ_MULTIPLE
-            uint8_t ble_cmd_attclient_read_multiple(uint8 connection, uint8 handles_len, const uint8 *handles_data);
+            uint8_t ble_cmd_attclient_read_multiple(uint8_t connection, uint8_t handles_len, const uint8_t *handles_data);
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_SM_ENCRYPT_START
-            uint8_t ble_cmd_sm_encrypt_start(uint8 handle, uint8 bonding);
+            uint8_t ble_cmd_sm_encrypt_start(uint8_t handle, uint8_t bonding);
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_SM_SET_BONDABLE_MODE
-            uint8_t ble_cmd_sm_set_bondable_mode(uint8 bondable);
+            uint8_t ble_cmd_sm_set_bondable_mode(uint8_t bondable);
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_SM_DELETE_BONDING
-            uint8_t ble_cmd_sm_delete_bonding(uint8 handle);
+            uint8_t ble_cmd_sm_delete_bonding(uint8_t handle);
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_SM_SET_PARAMETERS
-            uint8_t ble_cmd_sm_set_parameters(uint8 mitm, uint8 min_key_size, uint8 io_capabilities);
+            uint8_t ble_cmd_sm_set_parameters(uint8_t mitm, uint8_t min_key_size, uint8_t io_capabilities);
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_SM_PASSKEY_ENTRY
-            uint8_t ble_cmd_sm_passkey_entry(uint8 handle, uint32 passkey);
+            uint8_t ble_cmd_sm_passkey_entry(uint8_t handle, uint32_t passkey);
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_SM_GET_BONDS
             uint8_t ble_cmd_sm_get_bonds();
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_SM_SET_OOB_DATA
-            uint8_t ble_cmd_sm_set_oob_data(uint8 oob_len, const uint8 *oob_data);
+            uint8_t ble_cmd_sm_set_oob_data(uint8_t oob_len, const uint8_t *oob_data);
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_GAP_SET_PRIVACY_FLAGS
-            uint8_t ble_cmd_gap_set_privacy_flags(uint8 peripheral_privacy, uint8 central_privacy);
+            uint8_t ble_cmd_gap_set_privacy_flags(uint8_t peripheral_privacy, uint8_t central_privacy);
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_GAP_SET_MODE
-            uint8_t ble_cmd_gap_set_mode(uint8 discover, uint8 connect);
+            uint8_t ble_cmd_gap_set_mode(uint8_t discover, uint8_t connect);
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_GAP_DISCOVER
-            uint8_t ble_cmd_gap_discover(uint8 mode);
+            uint8_t ble_cmd_gap_discover(uint8_t mode);
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_GAP_CONNECT_DIRECT
-            uint8_t ble_cmd_gap_connect_direct(bd_addr address, uint8 addr_type, uint16 conn_interval_min, uint16 conn_interval_max, uint16 timeout, uint16 latency);
+            uint8_t ble_cmd_gap_connect_direct(bd_addr address, uint8_t addr_type, uint16_t conn_interval_min, uint16_t conn_interval_max, uint16_t timeout, uint16_t latency);
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_GAP_END_PROCEDURE
             uint8_t ble_cmd_gap_end_procedure();
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_GAP_CONNECT_SELECTIVE
-            uint8_t ble_cmd_gap_connect_selective(uint16 conn_interval_min, uint16 conn_interval_max, uint16 timeout, uint16 latency);
+            uint8_t ble_cmd_gap_connect_selective(uint16_t conn_interval_min, uint16_t conn_interval_max, uint16_t timeout, uint16_t latency);
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_GAP_SET_FILTERING
-            uint8_t ble_cmd_gap_set_filtering(uint8 scan_policy, uint8 adv_policy, uint8 scan_duplicate_filtering);
+            uint8_t ble_cmd_gap_set_filtering(uint8_t scan_policy, uint8_t adv_policy, uint8_t scan_duplicate_filtering);
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_GAP_SET_SCAN_PARAMETERS
-            uint8_t ble_cmd_gap_set_scan_parameters(uint16 scan_interval, uint16 scan_window, uint8 active);
+            uint8_t ble_cmd_gap_set_scan_parameters(uint16_t scan_interval, uint16_t scan_window, uint8_t active);
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_GAP_SET_ADV_PARAMETERS
-            uint8_t ble_cmd_gap_set_adv_parameters(uint16 adv_interval_min, uint16 adv_interval_max, uint8 adv_channels);
+            uint8_t ble_cmd_gap_set_adv_parameters(uint16_t adv_interval_min, uint16_t adv_interval_max, uint8_t adv_channels);
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_GAP_SET_ADV_DATA
-            uint8_t ble_cmd_gap_set_adv_data(uint8 set_scanrsp, uint8 adv_data_len, const uint8 *adv_data_data);
+            uint8_t ble_cmd_gap_set_adv_data(uint8_t set_scanrsp, uint8_t adv_data_len, const uint8_t *adv_data_data);
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_GAP_SET_DIRECTED_CONNECTABLE_MODE
-            uint8_t ble_cmd_gap_set_directed_connectable_mode(bd_addr address, uint8 addr_type);
+            uint8_t ble_cmd_gap_set_directed_connectable_mode(bd_addr address, uint8_t addr_type);
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_HARDWARE_IO_PORT_CONFIG_IRQ
-            uint8_t ble_cmd_hardware_io_port_config_irq(uint8 port, uint8 enable_bits, uint8 falling_edge);
+            uint8_t ble_cmd_hardware_io_port_config_irq(uint8_t port, uint8_t enable_bits, uint8_t falling_edge);
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_HARDWARE_SET_SOFT_TIMER
-            uint8_t ble_cmd_hardware_set_soft_timer(uint32 time, uint8 handle, uint8 single_shot);
+            uint8_t ble_cmd_hardware_set_soft_timer(uint32_t time, uint8_t handle, uint8_t single_shot);
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_HARDWARE_ADC_READ
-            uint8_t ble_cmd_hardware_adc_read(uint8 input, uint8 decimation, uint8 reference_selection);
+            uint8_t ble_cmd_hardware_adc_read(uint8_t input, uint8_t decimation, uint8_t reference_selection);
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_HARDWARE_IO_PORT_CONFIG_DIRECTION
-            uint8_t ble_cmd_hardware_io_port_config_direction(uint8 port, uint8 direction);
+            uint8_t ble_cmd_hardware_io_port_config_direction(uint8_t port, uint8_t direction);
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_HARDWARE_IO_PORT_CONFIG_FUNCTION
-            uint8_t ble_cmd_hardware_io_port_config_function(uint8 port, uint8 function);
+            uint8_t ble_cmd_hardware_io_port_config_function(uint8_t port, uint8_t function);
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_HARDWARE_IO_PORT_CONFIG_PULL
-            uint8_t ble_cmd_hardware_io_port_config_pull(uint8 port, uint8 tristate_mask, uint8 pull_up);
+            uint8_t ble_cmd_hardware_io_port_config_pull(uint8_t port, uint8_t tristate_mask, uint8_t pull_up);
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_HARDWARE_IO_PORT_WRITE
-            uint8_t ble_cmd_hardware_io_port_write(uint8 port, uint8 mask, uint8 data);
+            uint8_t ble_cmd_hardware_io_port_write(uint8_t port, uint8_t mask, uint8_t data);
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_HARDWARE_IO_PORT_READ
-            uint8_t ble_cmd_hardware_io_port_read(uint8 port, uint8 mask);
+            uint8_t ble_cmd_hardware_io_port_read(uint8_t port, uint8_t mask);
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_HARDWARE_SPI_CONFIG
-            uint8_t ble_cmd_hardware_spi_config(uint8 channel, uint8 polarity, uint8 phase, uint8 bit_order, uint8 baud_e, uint8 baud_m);
+            uint8_t ble_cmd_hardware_spi_config(uint8_t channel, uint8_t polarity, uint8_t phase, uint8_t bit_order, uint8_t baud_e, uint8_t baud_m);
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_HARDWARE_SPI_TRANSFER
-            uint8_t ble_cmd_hardware_spi_transfer(uint8 channel, uint8 data_len, const uint8 *data_data);
+            uint8_t ble_cmd_hardware_spi_transfer(uint8_t channel, uint8_t data_len, const uint8_t *data_data);
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_HARDWARE_I2C_READ
-            uint8_t ble_cmd_hardware_i2c_read(uint8 address, uint8 stop, uint8 length);
+            uint8_t ble_cmd_hardware_i2c_read(uint8_t address, uint8_t stop, uint8_t length);
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_HARDWARE_I2C_WRITE
-            uint8_t ble_cmd_hardware_i2c_write(uint8 address, uint8 stop, uint8 data_len, const uint8 *data_data);
+            uint8_t ble_cmd_hardware_i2c_write(uint8_t address, uint8_t stop, uint8_t data_len, const uint8_t *data_data);
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_HARDWARE_SET_TXPOWER
-            uint8_t ble_cmd_hardware_set_txpower(uint8 power);
+            uint8_t ble_cmd_hardware_set_txpower(uint8_t power);
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_HARDWARE_TIMER_COMPARATOR
-            uint8_t ble_cmd_hardware_timer_comparator(uint8 timer, uint8 channel, uint8 mode, uint16 comparator_value);
+            uint8_t ble_cmd_hardware_timer_comparator(uint8_t timer, uint8_t channel, uint8_t mode, uint16_t comparator_value);
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_HARDWARE_IO_PORT_IRQ_ENABLE
-            uint8_t ble_cmd_hardware_io_port_irq_enable(uint8 port, uint8 enable_bits);
+            uint8_t ble_cmd_hardware_io_port_irq_enable(uint8_t port, uint8_t enable_bits);
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_HARDWARE_IO_PORT_IRQ_DIRECTION
-            uint8_t ble_cmd_hardware_io_port_irq_direction(uint8 port, uint8 falling_edge);
+            uint8_t ble_cmd_hardware_io_port_irq_direction(uint8_t port, uint8_t falling_edge);
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_TEST_PHY_TX
-            uint8_t ble_cmd_test_phy_tx(uint8 channel, uint8 length, uint8 type);
+            uint8_t ble_cmd_test_phy_tx(uint8_t channel, uint8_t length, uint8_t type);
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_TEST_PHY_RX
-            uint8_t ble_cmd_test_phy_rx(uint8 channel);
+            uint8_t ble_cmd_test_phy_rx(uint8_t channel);
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_TEST_PHY_END
             uint8_t ble_cmd_test_phy_end();
@@ -1478,19 +1438,19 @@ class BGLib {
             uint8_t ble_cmd_test_get_channel_map();
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_TEST_DEBUG
-            uint8_t ble_cmd_test_debug(uint8 input_len, const uint8 *input_data);
+            uint8_t ble_cmd_test_debug(uint8_t input_len, const uint8_t *input_data);
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_TEST_CHANNEL_MODE
-            uint8_t ble_cmd_test_channel_mode(uint8 mode);
+            uint8_t ble_cmd_test_channel_mode(uint8_t mode);
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_DFU_RESET
-            uint8_t ble_cmd_dfu_reset(uint8 dfu);
+            uint8_t ble_cmd_dfu_reset(uint8_t dfu);
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_DFU_FLASH_SET_ADDRESS
-            uint8_t ble_cmd_dfu_flash_set_address(uint32 address);
+            uint8_t ble_cmd_dfu_flash_set_address(uint32_t address);
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_DFU_FLASH_UPLOAD
-            uint8_t ble_cmd_dfu_flash_upload(uint8 data_len, const uint8 *data_data);
+            uint8_t ble_cmd_dfu_flash_upload(uint8_t data_len, const uint8_t *data_data);
         #endif
         #ifdef BGLIB_ENABLE_COMMAND_DFU_FLASH_UPLOAD_FINISH
             uint8_t ble_cmd_dfu_flash_upload_finish();

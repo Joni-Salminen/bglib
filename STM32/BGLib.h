@@ -3,6 +3,9 @@
 
 #include "BGLibConfig.h"
 #include "inttypes.h"
+#include "usart.h"
+#include "UsartLib.h"
+
 #pragma region BGLIB_DEFINES
 #define BGLIB_SYSTEM_ENDPOINT_API                                   0
 #define BGLIB_SYSTEM_ENDPOINT_TEST                                  1
@@ -1146,7 +1149,7 @@ struct ble_msg_dfu_boot_evt_t {
 
 class BGLib {
     public:
-        BGLib(HardwareSerial *module=0, HardwareSerial *output=0, uint8_t pMode=0);
+        BGLib(Usart *module=0, Usart *output=0, uint8_t pMode=0);
         uint8_t checkActivity(uint16_t timeout=0);
         uint8_t checkError();
         uint8_t checkTimeout();
@@ -1158,8 +1161,8 @@ class BGLib {
         void *getLastRXPayload();
 
         // set/update UART port objects
-        void setModuleUART(HardwareSerial *module);
-        void setOutputUART(HardwareSerial *debug);
+        void setModuleUART(Usart *module);
+        void setOutputUART(Usart *debug);
 
         uint8_t parse(uint8_t ch, uint8_t packetMode=0);
         uint8_t sendCommand(uint16_t len, uint8_t commandClass, uint8_t commandId, void *payload=0);
@@ -1862,8 +1865,8 @@ class BGLib {
         struct ble_header packetHeader;
         uint8_t *packetData;
 
-        HardwareSerial *uModule; // required UART object with module connection
-        HardwareSerial *uOutput; // optional UART object for host/debug connection
+	    Usart *uModule;  // required UART object with module connection
+        Usart *uOutput;  // optional UART object for host/debug connection
 
         bool busy;
         uint8_t packetMode;

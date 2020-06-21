@@ -1,0 +1,56 @@
+#ifndef  __USARTTYPES_H
+#define  __USARTTYPES_H
+#endif
+
+enum class Usart_FlowControl {
+    NONE = LL_USART_HWCONTROL_NONE,
+    RTS_CTS = LL_USART_HWCONTROL_RTS_CTS,
+    CTS = LL_USART_HWCONTROL_CTS,
+    RTS = LL_USART_HWCONTROL_RTS
+};
+
+enum class Usart_Parity {
+  NONE = LL_USART_PARITY_NONE,
+  ODD = LL_USART_PARITY_ODD,
+  EVEN = LL_USART_PARITY_EVEN
+};
+
+enum class Usart_DataBits {
+ B8 = LL_USART_DATAWIDTH_8B,
+ B9 = LL_USART_DATAWIDTH_9B
+};
+
+enum class Usart_StopBits {
+ B0_5 = LL_USART_STOPBITS_0_5,
+ B1 = LL_USART_STOPBITS_1,
+ B1_5 = LL_USART_STOPBITS_1_5,
+ B2 = LL_USART_STOPBITS_2
+};
+
+enum class Usart_OverSampling {
+  B8 = LL_USART_OVERSAMPLING_8,
+  B16 = LL_USART_OVERSAMPLING_16
+};
+
+enum class Usart_Mode {
+
+  Disabled = 0x00000000U,
+  ReceiveOnly = USART_CR1_RE,
+  TrasmitOnly = USART_CR1_TE,
+  Enabled = (USART_CR1_RE | USART_CR1_TE)
+
+};
+
+enum class Interrupt {
+  //CR1
+  TX_EMPTY = USART_CR1_TXEIE,
+  TX_COMPLETED = USART_CR1_TCIE,
+  RX_NOT_EMPTY = USART_CR1_RXNEIE,
+  IDLE_LINE = USART_CR1_IDLEIE,
+  PARITY_ERROR = USART_CR1_PEIE,
+  //CR2
+  //CR3
+  ERROR = USART_CR3_EIE,
+  CTS = USART_CR3_CTSIE
+
+};
